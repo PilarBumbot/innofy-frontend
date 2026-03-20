@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Innofy — Construye un modelo de negocio que funciona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080808;
+    --bg2: #0d0d0a;
+    --neon: #e8ffe8;
+    --neon-glow: rgba(200,255,200,0.35);
+    --neon-dim: rgba(200,255,200,0.08);
+    --text: #c0c0b0;
+    --muted: #666;
+    --faint: #2a2a2a;
+    --border: #1a1a1a;
+    --mono: 'DM Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 24px;
+    letter-spacing: 4px;
+    color: var(--neon);
+    text-shadow: 0 0 20px var(--neon-glow);
+    text-decoration: none;
+  }
+
+  .nav-cta {
+    background: var(--neon);
+    border: none;
+    color: #080808;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0 16px var(--neon-glow);
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 2rem 5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    font-size: 9px;
+    color: var(--neon);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px var(--neon-glow);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--neon);
+    box-shadow: 0 0 8px var(--neon-glow);
+  }
+
+  .hero-headline {
+    font-family: var(--display);
+    font-size: clamp(48px, 8vw, 96px);
+    letter-spacing: 2px;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+
+  .hero-headline em {
+    color: var(--neon);
+    font-style: normal;
+    text-shadow: 0 0 30px var(--neon-glow), 0 0 60px rgba(200,255,200,0.15);
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .hero-sub strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .cta-primary {
+    display: inline-block;
+    background: var(--neon);
+    color: #080808;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    text-decoration: none;
+    box-shadow: 0 0 30px var(--neon-glow), 0 0 60px rgba(200,255,200,0.1);
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .cta-primary:hover {
+    box-shadow: 0 0 40px rgba(200,255,200,0.5), 0 0 80px rgba(200,255,200,0.2);
+    transform: translateY(-1px);
+  }
+
+  .cta-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 24px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 12px;
+  }
+  .cta-secondary:hover { color: var(--neon); border-color: var(--neon); }
+
+  /* ── STATS STRIP ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-top: 5rem;
+  }
+  .stat {
+    background: var(--bg);
+    padding: 1.5rem 1.5rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--display);
+    font-size: 42px;
+    letter-spacing: 2px;
+    color: var(--neon);
+    text-shadow: 0 0 20px var(--neon-glow);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ── SECTION SHARED ── */
+  .section-pad { padding: 6rem 2rem; }
+  .section-pad + .section-pad { border-top: 1px solid var(--border); }
+
+  .label {
+    font-size: 8px;
+    color: var(--neon);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px var(--neon-glow);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--neon);
+    display: block;
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 58px);
+    letter-spacing: 2px;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .section-title em {
+    color: var(--neon);
+    font-style: normal;
+    text-shadow: 0 0 20px var(--neon-glow);
+  }
+
+  .body-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 580px;
+  }
+  .body-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── STORY SECTION ── */
+  .story-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 2.5rem;
+    border-left: 2px solid var(--border);
+    padding-left: 1.5rem;
+  }
+  .story-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .story-item:last-child { border-bottom: none; }
+  .story-tag {
+    font-size: 8px;
+    color: var(--faint);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .story-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .story-text strong { color: var(--text); font-weight: 500; }
+
+  /* ── COST GRID ── */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin-top: 2.5rem;
+    border: 1px solid var(--border);
+  }
+  .cost-item {
+    background: var(--bg2);
+    padding: 1.5rem;
+  }
+  .cost-arrow {
+    font-size: 18px;
+    color: var(--neon);
+    text-shadow: 0 0 10px var(--neon-glow);
+    margin-bottom: 0.75rem;
+    line-height: 1;
+  }
+  .cost-title { font-size: 11px; color: var(--text); font-weight: 500; margin-bottom: 6px; }
+  .cost-desc { font-size: 10px; color: var(--muted); line-height: 1.6; }
+
+  /* ── SOLUTION SECTION ── */
+  .solution-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 640px) { .solution-wrap { grid-template-columns: 1fr; } }
+
+  .solution-points {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .solution-point {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    transition: border-color 0.2s;
+  }
+  .solution-point:hover { border-color: rgba(200,255,200,0.2); }
+  .sp-icon {
+    font-size: 14px;
+    color: var(--neon);
+    text-shadow: 0 0 8px var(--neon-glow);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .sp-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .sp-text strong { color: var(--text); font-weight: 500; display: block; margin-bottom: 2px; }
+
+  .solution-quote {
+    border-left: 3px solid var(--neon);
+    padding: 2rem 1.5rem;
+    background: var(--neon-dim);
+    box-shadow: -4px 0 20px var(--neon-glow);
+  }
+  .sq-text {
+    font-family: var(--display);
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    color: var(--neon);
+    text-shadow: 0 0 20px var(--neon-glow);
+    margin-bottom: 1rem;
+  }
+  .sq-sub { font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+  /* ── MODULES ── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 2.5rem;
+  }
+  .module-item {
+    background: var(--bg2);
+    padding: 1.25rem 1.25rem;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: background 0.2s;
+  }
+  .module-item:hover { background: #111108; }
+  .module-code {
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    min-width: 30px;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .module-code.free { color: var(--neon); text-shadow: 0 0 6px var(--neon-glow); }
+  .module-code.paid { color: #444; }
+  .module-info {}
+  .module-name { font-size: 11px; color: var(--text); font-weight: 500; margin-bottom: 2px; }
+  .module-desc { font-size: 9px; color: var(--muted); line-height: 1.5; }
+  .module-free-badge {
+    margin-left: auto;
+    font-size: 7px;
+    color: var(--neon);
+    letter-spacing: 1px;
+    border: 1px solid rgba(200,255,200,0.3);
+    padding: 2px 7px;
+    flex-shrink: 0;
+    text-shadow: 0 0 5px var(--neon-glow);
+    align-self: flex-start;
+  }
+
+  /* ── BEFORE / AFTER ── */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 560px) { .ba-grid { grid-template-columns: 1fr; } }
+  .ba-col { padding: 2rem; background: var(--bg2); }
+  .ba-header {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .ba-header.before { color: #664444; }
+  .ba-header.after { color: var(--neon); text-shadow: 0 0 6px var(--neon-glow); }
+  .ba-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .ba-item.before { color: #664444; }
+  .ba-item.after { color: #a0c8a0; }
+  .ba-dot { flex-shrink: 0; padding-top: 5px; font-size: 6px; }
+
+  /* ── PACKAGES ── */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 600px) { .packages-grid { grid-template-columns: 1fr; } }
+  .pkg {
+    background: var(--bg2);
+    padding: 2rem 1.5rem;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .pkg:hover { background: #111108; }
+  .pkg.featured {
+    background: rgba(200,255,200,0.03);
+    border: 1px solid rgba(200,255,200,0.15);
+    box-shadow: 0 0 30px rgba(200,255,200,0.05);
+  }
+  .pkg-tag {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: var(--neon);
+    color: #080808;
+    font-size: 7px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px;
+  }
+  .pkg-name { font-size: 9px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; margin-top: 0.5rem; }
+  .pkg-price {
+    font-family: var(--display);
+    font-size: 40px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .pkg.featured .pkg-price { color: var(--neon); text-shadow: 0 0 20px var(--neon-glow); }
+  .pkg:not(.featured) .pkg-price { color: #888; }
+  .pkg-currency { font-size: 9px; color: var(--muted); letter-spacing: 1px; margin-bottom: 1.25rem; }
+  .pkg-projects { font-size: 11px; color: var(--text); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+  .pkg-feature { font-size: 9px; color: var(--muted); margin-bottom: 6px; display: flex; gap: 8px; }
+  .pkg-feature::before { content: '→'; color: var(--neon); flex-shrink: 0; text-shadow: 0 0 5px var(--neon-glow); }
+
+  /* ── OBJECTIONS ── */
+  .obj-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    margin-top: 2.5rem;
+  }
+  .obj-item {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .obj-item:last-child { border-bottom: none; }
+  @media (max-width: 560px) { .obj-item { grid-template-columns: 1fr; gap: 0.75rem; } }
+  .obj-q { font-size: 12px; color: #554444; line-height: 1.6; }
+  .obj-q::before { content: '"'; }
+  .obj-q::after { content: '"'; }
+  .obj-a { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .obj-a strong { color: var(--text); font-weight: 500; }
+
+  /* ── FINAL CTA ── */
+  #final-cta {
+    padding: 8rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: radial-gradient(ellipse at center, rgba(200,255,200,0.04) 0%, transparent 70%);
+  }
+  .final-title {
+    font-family: var(--display);
+    font-size: clamp(36px, 6vw, 72px);
+    letter-spacing: 3px;
+    line-height: 1.0;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .final-title em { color: var(--neon); font-style: normal; text-shadow: 0 0 30px var(--neon-glow); }
+  .final-sub { font-size: 13px; color: var(--muted); margin-bottom: 3rem; line-height: 1.8; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .urgency-items {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .urgency-item { font-size: 10px; color: #664444; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+  .urgency-item::before { content: '↑'; color: #aa5050; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo { font-family: var(--display); font-size: 18px; letter-spacing: 3px; color: var(--neon); text-shadow: 0 0 10px var(--neon-glow); }
+  .footer-text { font-size: 9px; color: var(--faint); letter-spacing: 1px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.7s ease forwards; }
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.25s; opacity: 0; }
+  .delay-3 { animation-delay: 0.4s; opacity: 0; }
+  .delay-4 { animation-delay: 0.55s; opacity: 0; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-size: 8px; color: var(--faint); letter-spacing: 2px; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">INNOFY</a>
+  <a href="/app" class="nav-cta">Comenzar gratis →</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up">Mentor de modelo de negocio · IA estratégica</div>
+    <h1 class="hero-headline fade-up delay-1">
+      Si no puedes<br>explicar cómo<br>
+      <em>ganas dinero,</em><br>no tienes<br>un negocio.
+    </h1>
+    <p class="hero-sub fade-up delay-2">
+      Convierte tu idea en un modelo de negocio <strong>sólido, rentable y listo para ejecutar.</strong>
+      Sin improvisación. Sin teoría. Con decisiones que mueven el negocio.
+    </p>
+    <div class="fade-up delay-3">
+      <a href="/app" class="cta-primary">Quiero estructurar mi negocio</a>
+      <a href="#modulos" class="cta-secondary">Ver los módulos</a>
+    </div>
+
+    <div class="stats fade-up delay-4">
+      <div class="stat">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Módulos de análisis</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Entregables por módulo</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Modelo listo para ejecutar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="section-pad">
+  <div class="container">
+    <div class="label">El problema</div>
+    <h2 class="section-title">La mayoría<br>empieza <em>igual.</em></h2>
+    <div class="story-items">
+      <div class="story-item">
+        <div class="story-tag">Día 1</div>
+        <div class="story-text">Una idea. Motivación. Ganas de comerse el mundo.</div>
+      </div>
+      <div class="story-item">
+        <div class="story-tag">Mes 3</div>
+        <div class="story-text">
+          <strong>Más trabajo... pero no más ingresos.</strong><br>
+          Más esfuerzo... pero menos claridad.<br>
+          Decisiones... sin saber si son las correctas.
+        </div>
+      </div>
+      <div class="story-item">
+        <div class="story-tag">La pregunta</div>
+        <div class="story-text"><strong>¿Estoy construyendo un negocio... o perdiendo el tiempo?</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERDAD INCÓMODA -->
+<section class="section-pad" style="background:var(--bg2);">
+  <div class="container">
+    <div class="label">La verdad</div>
+    <h2 class="section-title">No es falta<br>de <em>talento.</em></h2>
+    <p class="body-text" style="margin-bottom:2.5rem;">
+      No estás fallando porque no seas capaz. Estás fallando porque estás operando
+      <strong>sin estructura estratégica.</strong>
+    </p>
+    <div class="cost-grid">
+      <div class="cost-item">
+        <div class="cost-arrow">→</div>
+        <div class="cost-title">No sabes cómo generas dinero realmente</div>
+        <div class="cost-desc">Tienes ingresos, quizás. Pero no tienes un modelo. Hay una diferencia.</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-arrow">→</div>
+        <div class="cost-title">No sabes qué parte del modelo está rota</div>
+        <div class="cost-desc">Optimizas lo que ves, pero el problema está donde no estás mirando.</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-arrow">→</div>
+        <div class="cost-title">Tomas decisiones sin criterio estructural</div>
+        <div class="cost-desc">Intuición no es estrategia. Y la intuición no escala.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COSTO REAL -->
+<section class="section-pad">
+  <div class="container">
+    <div class="label">El costo de no actuar</div>
+    <h2 class="section-title">Cada semana<br>sin claridad <em>tiene precio.</em></h2>
+    <p class="body-text" style="margin-bottom:2rem;">
+      No es solo confusión. Es pérdida acumulada. Cada semana que operas sin estructura:
+    </p>
+    <div class="cost-grid">
+      <div class="cost-item">
+        <div class="cost-arrow" style="color:#aa5050;text-shadow:none;">↑</div>
+        <div class="cost-title" style="color:#886060;">Inversión sin retorno claro</div>
+        <div class="cost-desc">Dinero que sale antes de que el modelo esté validado.</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-arrow" style="color:#aa5050;text-shadow:none;">↑</div>
+        <div class="cost-title" style="color:#886060;">Tiempo en acciones que no mueven el negocio</div>
+        <div class="cost-desc">Actividad sin alineación estratégica es ruido operativo.</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-arrow" style="color:#aa5050;text-shadow:none;">↑</div>
+        <div class="cost-title" style="color:#886060;">Oportunidades que no detectas</div>
+        <div class="cost-desc">Sin estructura no ves los patrones. Y el mercado no espera.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUCIÓN -->
+<section class="section-pad" style="background:var(--bg2);">
+  <div class="container">
+    <div class="label">La solución</div>
+    <h2 class="section-title">Esto no es<br>un curso. <em>Es un sistema.</em></h2>
+    <div class="solution-wrap">
+      <div class="solution-points">
+        <div class="solution-point">
+          <div class="sp-icon">⟶</div>
+          <div class="sp-text">
+            <strong>Te obliga a definir lo que has evitado</strong>
+            Preguntas incómodas que revelan si el modelo aguanta. Sin filtros.
+          </div>
+        </div>
+        <div class="solution-point">
+          <div class="sp-icon">⟶</div>
+          <div class="sp-text">
+            <strong>Detecta los vacíos críticos de tu modelo</strong>
+            No en teoría — en los 9 bloques de tu BMC, uno por uno.
+          </div>
+        </div>
+        <div class="solution-point">
+          <div class="sp-icon">⟶</div>
+          <div class="sp-text">
+            <strong>Evalúa la solidez de tu negocio con criterio de VC</strong>
+            Un decálogo de recomendaciones estratégicas al cierre de cada módulo.
+          </div>
+        </div>
+        <div class="solution-point">
+          <div class="sp-icon">⟶</div>
+          <div class="sp-text">
+            <strong>No avanzas si tu modelo no tiene sentido</strong>
+            Progresión bloqueada. Sin entregable sólido, no hay siguiente módulo.
+          </div>
+        </div>
+      </div>
+      <div class="solution-quote">
+        <div class="sq-text">No te da palmaditas. Te hace las preguntas que nadie más te hace.</div>
+        <div class="sq-sub">INNOFY actúa como un VC experimentado: directo, preciso, sin porrismo. Su trabajo es revelar si el modelo aguanta — no hacerte sentir bien.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="section-pad" id="modulos">
+  <div class="container">
+    <div class="label">El programa</div>
+    <h2 class="section-title">12 módulos.<br>Un modelo <em>completo.</em></h2>
+    <p class="body-text" style="margin-bottom:0;">M0 y M1 son completamente gratuitos. Sin tarjeta. Sin compromiso.</p>
+    <div class="modules-grid">
+      <div class="module-item">
+        <div class="module-code free">M0</div>
+        <div class="module-info">
+          <div class="module-name">Brief del negocio</div>
+          <div class="module-desc">Contexto estratégico, industria y tendencias emergentes</div>
+        </div>
+        <div class="module-free-badge">GRATIS</div>
+      </div>
+      <div class="module-item">
+        <div class="module-code free">M1</div>
+        <div class="module-info">
+          <div class="module-name">Radiografía del modelo</div>
+          <div class="module-desc">Canvas diagnóstico + SWOT + Decálogo estratégico</div>
+        </div>
+        <div class="module-free-badge">GRATIS</div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M2</div>
+        <div class="module-info">
+          <div class="module-name">Segmentación de mercado</div>
+          <div class="module-desc">ICP, mapa de roles, TAM/SAM/SOM top-down y bottom-up</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M3</div>
+        <div class="module-info">
+          <div class="module-name">Propuesta de valor</div>
+          <div class="module-desc">Jobs, Pains, Gains, encaje y coherencia sistémica</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M4</div>
+        <div class="module-info">
+          <div class="module-name">Canales</div>
+          <div class="module-desc">5 fases Osterwalder, journey completo y economía del canal</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M5</div>
+        <div class="module-info">
+          <div class="module-name">Relación con clientes</div>
+          <div class="module-desc">Arquitectura del vínculo, momentos críticos y retención</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M6</div>
+        <div class="module-info">
+          <div class="module-name">Fuentes de ingresos</div>
+          <div class="module-desc">Monetización, economía unitaria, CAC / LTV / Payback</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M7</div>
+        <div class="module-info">
+          <div class="module-name">Recursos clave</div>
+          <div class="module-desc">Infraestructura del modelo, build/buy/partner, cuellos de botella</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M8</div>
+        <div class="module-info">
+          <div class="module-name">Actividades clave</div>
+          <div class="module-desc">Cadena de valor, core vs soporte, automatización</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M9</div>
+        <div class="module-info">
+          <div class="module-name">Socios clave</div>
+          <div class="module-desc">Alianzas estratégicas, dependencias y gobernanza</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M10</div>
+        <div class="module-info">
+          <div class="module-name">Costos y coherencia</div>
+          <div class="module-desc">BMC completo ensamblado, coherencia sistémica, escenarios</div>
+        </div>
+      </div>
+      <div class="module-item">
+        <div class="module-code paid">M11</div>
+        <div class="module-info">
+          <div class="module-name">Pitch</div>
+          <div class="module-desc">Para inversionistas, clientes y equipo + Q&A de VC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="section-pad" style="background:var(--bg2);">
+  <div class="container">
+    <div class="label">La transformación</div>
+    <h2 class="section-title">De "probar cosas"<br>a <em>construir en serio.</em></h2>
+    <div class="ba-grid">
+      <div class="ba-col">
+        <div class="ba-header before">Antes · Sin estructura</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Idea en tu cabeza sin modelo claro</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Decisiones por intuición</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Ingresos inciertos o inconsistentes</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Sensación permanente de desorden</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Trabajo sin dirección estratégica</div>
+        <div class="ba-item before"><span class="ba-dot">■</span>Sin saber qué parte del modelo está rota</div>
+      </div>
+      <div class="ba-col">
+        <div class="ba-header after">Después · Con INNOFY</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Business Model Canvas completo y validado</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Decisiones con criterio estratégico</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Claridad sobre cómo generar y escalar ingresos</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Ruta concreta de ejecución desde mañana</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Decálogo de recomendaciones por módulo</div>
+        <div class="ba-item after"><span class="ba-dot">■</span>Pitch listo para inversionistas y clientes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="section-pad">
+  <div class="container">
+    <div class="label">Paquetes</div>
+    <h2 class="section-title">Elige tu<br><em>plan de proyectos.</em></h2>
+    <p class="body-text" style="margin-bottom:0;">Pago único. Acceso de por vida. Sin suscripciones.</p>
+    <div class="packages-grid">
+      <div class="pkg">
+        <div class="pkg-name">Starter</div>
+        <div class="pkg-price">$175.000</div>
+        <div class="pkg-currency">COP · pago único · ≈ USD 39</div>
+        <div class="pkg-projects">1 proyecto completo</div>
+        <div class="pkg-feature">12 módulos completos</div>
+        <div class="pkg-feature">Canvas Maestro en vivo</div>
+        <div class="pkg-feature">Entregables exportables</div>
+        <div class="pkg-feature">Pitch para 3 audiencias</div>
+      </div>
+      <div class="pkg featured">
+        <div class="pkg-tag">MÁS POPULAR</div>
+        <div class="pkg-name" style="margin-top:1.75rem;">Growth</div>
+        <div class="pkg-price">$545.000</div>
+        <div class="pkg-currency">COP · pago único · ≈ USD 120</div>
+        <div class="pkg-projects">Hasta 5 proyectos</div>
+        <div class="pkg-feature">Todo lo del Starter</div>
+        <div class="pkg-feature">5 negocios simultáneos</div>
+        <div class="pkg-feature">Ideal para consultores</div>
+        <div class="pkg-feature">Upgrade pagando diferencia</div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">Scale</div>
+        <div class="pkg-price">$990.000</div>
+        <div class="pkg-currency">COP · pago único · ≈ USD 220</div>
+        <div class="pkg-projects">Hasta 10 proyectos</div>
+        <div class="pkg-feature">Todo lo del Growth</div>
+        <div class="pkg-feature">10 negocios o clientes</div>
+        <div class="pkg-feature">Ideal para aceleradoras</div>
+        <div class="pkg-feature">Upgrade pagando diferencia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECIONES -->
+<section class="section-pad" style="background:var(--bg2);">
+  <div class="container">
+    <div class="label">Objeciones frecuentes</div>
+    <h2 class="section-title">Las dudas<br>que <em>sabemos que tienes.</em></h2>
+    <div class="obj-list">
+      <div class="obj-item">
+        <div class="obj-q">No soy experto en negocios</div>
+        <div class="obj-a">No necesitas serlo. <strong>INNOFY te guía por cada módulo con preguntas específicas.</strong> El sistema está diseñado para llevar al emprendedor sin formación formal hasta tener un modelo sólido.</div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q">No tengo tiempo</div>
+        <div class="obj-a"><strong>Sin estructura estás perdiendo más tiempo del que crees.</strong> Cada semana sin modelo claro es trabajo desalineado. Avanzas en módulos a tu ritmo — guardamos tu progreso automáticamente.</div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q">Ya he intentado algo similar</div>
+        <div class="obj-a">Probablemente sin evaluación real ni criterio estratégico. <strong>INNOFY no te deja avanzar si el entregable tiene huecos críticos.</strong> No es un cuestionario. Es un proceso de construcción con exigencia.</div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q">¿Qué pasa si me quedo a mitad?</div>
+        <div class="obj-a"><strong>Tu progreso se guarda en cada módulo.</strong> Puedes retomar exactamente donde lo dejaste, en cualquier momento, desde cualquier dispositivo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="final-cta">
+  <div class="container">
+    <div class="label" style="justify-content:center;">La decisión</div>
+    <h2 class="final-title">
+      Menos intuición.<br>
+      Más <em>estructura.</em>
+    </h2>
+    <p class="final-sub">
+      Seguir como estás también es una decisión. Y tiene un costo.
+      Cada semana sin estructura aumenta el riesgo, diluye el enfoque y retrasa los resultados.
+    </p>
+    <div class="urgency-items">
+      <div class="urgency-item">Riesgo acumulado</div>
+      <div class="urgency-item">Foco diluido</div>
+      <div class="urgency-item">Resultados retrasados</div>
+    </div>
+    <a href="/app" class="cta-primary" style="font-size:11px;padding:18px 44px;">
+      Construir mi modelo de negocio →
+    </a>
+    <div style="margin-top:1.5rem;font-size:9px;color:var(--faint);letter-spacing:1px;">
+      M0 y M1 completamente gratis · Sin tarjeta de crédito · Acceso inmediato
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">INNOFY</div>
+  <div class="footer-text">© 2025 Innofy · innofy.josepolo.co · Powered by Elev8</div>
+  <a href="/app" class="nav-cta" style="font-size:8px;padding:8px 16px;">Ingresar →</a>
+</footer>
+
+</body>
+</html>
