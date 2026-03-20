@@ -138,7 +138,7 @@ function AuthScreen({ onAuth }) {
 
           <button onClick={handleGoogle} disabled={loading}
             style={{display:"flex",alignItems:"center",justifyContent:"center",gap:12,
-              width:"100%",background:"#fff",border:"none",color:"#1a1a1a",
+              width:"100%",background:"#fff",border:"none",color:"#666",
               fontSize:11,fontWeight:500,letterSpacing:1,padding:"14px 20px",
               fontFamily:"'DM Mono',monospace",cursor:loading?"not-allowed":"pointer",
               opacity:loading?.6:1,transition:"opacity .2s",
@@ -246,7 +246,7 @@ function PackagesScreen({ token, user, onPurchased, onSkip }) {
                     textShadow:sel?"0 0 15px rgba(200,255,200,0.3)":"none",lineHeight:1,marginBottom:8}}>
                     ${pkg.priceCOP}
                   </div>
-                  <div style={{fontSize:9,color:"#333",letterSpacing:1}}>COP · pago único</div>
+                  <div style={{fontSize:9,color:"#999",letterSpacing:1}}>COP · pago único</div>
                   <div style={{marginTop:"1rem",paddingTop:"1rem",borderTop:"1px solid #1a1a1a"}}>
                     <div style={{fontSize:11,color:sel?"#c0c0b0":"#444",marginBottom:4}}>
                       <span style={{color:sel?"#e8ffe8":"#555",textShadow:sel?"0 0 6px rgba(200,255,200,0.3)":"none"}}>
@@ -254,7 +254,7 @@ function PackagesScreen({ token, user, onPurchased, onSkip }) {
                       </span>
                     </div>
                     {["12 módulos completos","Canvas Maestro en vivo","Entregables exportables"].map((f,i)=>(
-                      <div key={i} style={{fontSize:9,color:"#2a2a2a",marginBottom:3}}>→ {f}</div>
+                      <div key={i} style={{fontSize:9,color:"#888",marginBottom:3}}>→ {f}</div>
                     ))}
                   </div>
                 </div>
@@ -271,7 +271,7 @@ function PackagesScreen({ token, user, onPurchased, onSkip }) {
         {/* Código de descuento — solo P1 */}
         {selected === 1 && (
           <div style={{marginBottom:"1rem"}}>
-            <div style={{fontSize:9,color:"#333",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Código de descuento</div>
+            <div style={{fontSize:9,color:"#999",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Código de descuento</div>
             <div style={{display:"flex",gap:8}}>
               <input value={code} onChange={e=>{ setCode(e.target.value.toUpperCase()); setCodeMsg(null); }}
                 placeholder="CÓDIGO"
@@ -306,7 +306,7 @@ function PackagesScreen({ token, user, onPurchased, onSkip }) {
         {verifyError && <div style={{fontSize:9,color:"#aa5050",letterSpacing:.5}}>{verifyError}</div>}
 
         <button onClick={onSkip}
-          style={{width:"100%",background:"transparent",border:"none",color:"#2a2a2a",
+          style={{width:"100%",background:"transparent",border:"none",color:"#888",
             fontSize:8,letterSpacing:2,textTransform:"uppercase",padding:"10px",
             fontFamily:"'DM Mono',monospace",cursor:"pointer",marginTop:4}}>
           Continuar con M0 y M1 gratis →
@@ -358,7 +358,7 @@ function ProjectsDashboard({ token, user, quota, onOpenProject, onNewProject, on
         <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:"2rem",flexWrap:"wrap",gap:12}}>
           <div>
             <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:36,letterSpacing:3,color:"#e8ffe8",textShadow:"0 0 20px rgba(200,255,200,0.25)"}}>MIS PROYECTOS</div>
-            <div style={{fontSize:9,color:"#333",letterSpacing:2,marginTop:2}}>{user.name} · {user.email}</div>
+            <div style={{fontSize:9,color:"#999",letterSpacing:2,marginTop:2}}>{user.name} · {user.email}</div>
           </div>
           <div style={{textAlign:"right"}}>
             {pkg ? (
@@ -394,7 +394,7 @@ function ProjectsDashboard({ token, user, quota, onOpenProject, onNewProject, on
               <div style={{height:"100%",width:`${Math.min(100,(quota.used/quota.max)*100)}%`,
                 background:"#e8ffe8",borderRadius:1,boxShadow:"0 0 6px rgba(200,255,200,0.4)",transition:"width .5s"}}/>
             </div>
-            <div style={{fontSize:8,color:"#2a2a2a",marginTop:4,letterSpacing:1}}>
+            <div style={{fontSize:8,color:"#888",marginTop:4,letterSpacing:1}}>
               {quota.remaining} PROYECTO{quota.remaining!==1?"S":""} DISPONIBLE{quota.remaining!==1?"S":""}
             </div>
           </div>
@@ -402,11 +402,11 @@ function ProjectsDashboard({ token, user, quota, onOpenProject, onNewProject, on
 
         {/* Projects list */}
         {loading ? (
-          <div style={{fontSize:11,color:"#2a2a2a",letterSpacing:1}}>Cargando...</div>
+          <div style={{fontSize:11,color:"#888",letterSpacing:1}}>Cargando...</div>
         ) : projects.length === 0 ? (
           <div style={{border:"1px dashed #1a1a1a",padding:"2.5rem",textAlign:"center"}}>
-            <div style={{fontSize:11,color:"#2a2a2a",marginBottom:8}}>Sin proyectos aún</div>
-            <div style={{fontSize:9,color:"#1a1a1a"}}>Crea tu primer proyecto para comenzar</div>
+            <div style={{fontSize:11,color:"#888",marginBottom:8}}>Sin proyectos aún</div>
+            <div style={{fontSize:9,color:"#666"}}>Crea tu primer proyecto para comenzar</div>
           </div>
         ) : (
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:"1rem"}}>
@@ -430,7 +430,7 @@ function ProjectsDashboard({ token, user, quota, onOpenProject, onNewProject, on
                       background:"#e8ffe8",borderRadius:1,boxShadow:"0 0 4px rgba(200,255,200,0.3)"}}/>
                   </div>
                 </div>
-                <div style={{fontSize:16,color:"#2a2a2a"}}>›</div>
+                <div style={{fontSize:16,color:"#888"}}>›</div>
               </div>
             ))}
           </div>
@@ -464,7 +464,7 @@ function ProjectsDashboard({ token, user, quota, onOpenProject, onNewProject, on
                 {creating?"Creando...":"Crear →"}
               </button>
               <button onClick={()=>{setShowForm(false);setError(null);setForm({name:"",business:""});}}
-                style={{background:"transparent",border:"1px solid #1e1e1e",color:"#333",fontSize:9,
+                style={{background:"transparent",border:"1px solid #1e1e1e",color:"#999",fontSize:9,
                   letterSpacing:2,padding:"10px 16px",fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>
                 Cancelar
               </button>
@@ -540,7 +540,7 @@ function UpgradeScreen({ token, user, currentPackageId, onUpgraded, onBack }) {
   return (
     <div style={{minHeight:"100vh",background:"#080808",padding:"2.5rem 1.5rem",fontFamily:"'DM Mono',monospace"}}>
       <div style={{maxWidth:560,margin:"0 auto"}}>
-        <button onClick={onBack} style={{background:"transparent",border:"none",color:"#333",fontSize:9,letterSpacing:2,fontFamily:"'DM Mono',monospace",cursor:"pointer",marginBottom:"1.5rem"}}>← Volver</button>
+        <button onClick={onBack} style={{background:"transparent",border:"none",color:"#999",fontSize:9,letterSpacing:2,fontFamily:"'DM Mono',monospace",cursor:"pointer",marginBottom:"1.5rem"}}>← Volver</button>
         <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:40,letterSpacing:3,color:"#e8ffe8",textShadow:"0 0 20px rgba(200,255,200,0.25)",marginBottom:"0.5rem"}}>UPGRADE</div>
         <div style={{fontSize:9,color:"#444",letterSpacing:2,marginBottom:"2rem"}}>
           PLAN ACTUAL: {curPkg?.name||"Sin paquete"} · PAGAS SOLO LA DIFERENCIA
@@ -559,13 +559,13 @@ function UpgradeScreen({ token, user, currentPackageId, onUpgraded, onBack }) {
                   boxShadow:sel?"0 0 15px rgba(200,255,200,0.06)":"none",transition:"all .2s"}}>
                 <div style={{flex:1}}>
                   <div style={{fontSize:12,color:sel?"#e8ffe8":"#888",letterSpacing:1}}>{pkg.name}</div>
-                  <div style={{fontSize:9,color:"#333",marginTop:3}}>Hasta {pkg.projects} proyectos</div>
+                  <div style={{fontSize:9,color:"#999",marginTop:3}}>Hasta {pkg.projects} proyectos</div>
                 </div>
                 <div style={{textAlign:"right"}}>
                   <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,color:sel?"#e8ffe8":"#555",letterSpacing:1}}>
                     +${(diff/100).toLocaleString("es-CO")}
                   </div>
-                  <div style={{fontSize:8,color:"#2a2a2a",letterSpacing:1}}>COP diferencia</div>
+                  <div style={{fontSize:8,color:"#888",letterSpacing:1}}>COP diferencia</div>
                 </div>
                 {sel && <div style={{width:14,height:14,borderRadius:"50%",background:"#e8ffe8",display:"flex",alignItems:"center",justifyContent:"center",fontSize:8,color:"#080808",flexShrink:0}}>✓</div>}
               </div>
@@ -693,11 +693,11 @@ function ProjectScreen({ token, user, project, hasPaid, onBack, onSave }) {
           </div>
           <div style={{padding:"8px 12px",borderBottom:"1px solid #161616"}}>
             <div style={{fontSize:11,color:"#888",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{project.name}</div>
-            <div style={{fontSize:9,color:"#2a2a2a",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:2}}>{project.business}</div>
+            <div style={{fontSize:9,color:"#888",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:2}}>{project.business}</div>
             <div style={{height:1,background:"#161616",marginTop:7}}>
               <div style={{height:"100%",width:`${prog}%`,background:"#e8ffe8",boxShadow:"0 0 5px rgba(200,255,200,0.4)",transition:"width .5s"}}/>
             </div>
-            <div style={{fontSize:7,color:"#2a2a2a",marginTop:3}}>{done.length}/12 · {prog}%</div>
+            <div style={{fontSize:7,color:"#888",marginTop:3}}>{done.length}/12 · {prog}%</div>
           </div>
           <div style={{flex:1,overflowY:"auto",padding:"5px 0"}}>
             {MODULES.map(m=>{
@@ -725,7 +725,7 @@ function ProjectScreen({ token, user, project, hasPaid, onBack, onSave }) {
             })}
           </div>
           <div style={{padding:"8px 12px",borderTop:"1px solid #161616"}}>
-            <button onClick={onBack} style={{width:"100%",background:"transparent",border:"1px solid #1a1a1a",color:"#2a2a2a",fontSize:7,letterSpacing:2,textTransform:"uppercase",padding:"6px",fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>
+            <button onClick={onBack} style={{width:"100%",background:"transparent",border:"1px solid #1a1a1a",color:"#888",fontSize:7,letterSpacing:2,textTransform:"uppercase",padding:"6px",fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>
               ← Proyectos
             </button>
           </div>
@@ -734,10 +734,10 @@ function ProjectScreen({ token, user, project, hasPaid, onBack, onSave }) {
 
       <div style={{flex:1,display:"flex",flexDirection:"column",overflow:"hidden",minWidth:0}}>
         <div style={{height:42,background:"#0a0a0a",borderBottom:"1px solid #161616",display:"flex",alignItems:"center",flexShrink:0}}>
-          <button onClick={()=>setSidebar(v=>!v)} style={{width:42,height:42,background:"transparent",border:"none",borderRight:"1px solid #161616",color:"#2a2a2a",fontSize:13,cursor:"pointer"}}>{sidebar?"◂":"▸"}</button>
+          <button onClick={()=>setSidebar(v=>!v)} style={{width:42,height:42,background:"transparent",border:"none",borderRight:"1px solid #161616",color:"#888",fontSize:13,cursor:"pointer"}}>{sidebar?"◂":"▸"}</button>
           <div style={{padding:"0 14px",borderRight:"1px solid #161616",height:"100%",display:"flex",alignItems:"center",gap:8}}>
             <span style={{fontSize:10,color:"#e8ffe8",letterSpacing:2,textShadow:"0 0 6px rgba(200,255,200,0.3)"}}>{mod.code}</span>
-            <span style={{fontSize:10,color:"#2a2a2a"}}>{mod.name}</span>
+            <span style={{fontSize:10,color:"#888"}}>{mod.name}</span>
           </div>
           <div style={{display:"flex",height:"100%",marginLeft:"auto"}}>
             {["chat","canvas","entregas"].map(p=>(
@@ -774,7 +774,7 @@ function ProjectScreen({ token, user, project, hasPaid, onBack, onSave }) {
               <div style={{padding:"10px 12px",background:"#0a0a0a",borderTop:"1px solid #161616"}}>
                 {!mod.free && !hasPaid ? (
                   <div style={{padding:"12px 14px",border:"1px solid #1e2a1e",background:"rgba(232,255,232,0.02)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                    <div style={{fontSize:10,color:"#333"}}>Requiere paquete activo</div>
+                    <div style={{fontSize:10,color:"#999"}}>Requiere paquete activo</div>
                     <button onClick={onBack} style={{background:"#e8ffe8",border:"none",color:"#080808",fontSize:8,letterSpacing:2,padding:"7px 14px",fontFamily:"'DM Mono',monospace",cursor:"pointer"}}>Comprar →</button>
                   </div>
                 ) : (
@@ -820,7 +820,7 @@ function ProjectScreen({ token, user, project, hasPaid, onBack, onSave }) {
                     <div onClick={()=>setOpenDel(p=>({...p,[i]:!p[i]}))}
                       style={{display:"flex",alignItems:"center",gap:10,padding:"7px 12px",cursor:"pointer"}}>
                       <div style={{fontSize:8,color:"#e8ffe8",letterSpacing:2,textShadow:"0 0 5px rgba(200,255,200,0.3)"}}>{MODULES[d.mi]?.code}</div>
-                      <div style={{flex:1,fontSize:9,color:"#2a2a2a",letterSpacing:1}}>Entregable {d.i+1} — {MODULES[d.mi]?.name}</div>
+                      <div style={{flex:1,fontSize:9,color:"#888",letterSpacing:1}}>Entregable {d.i+1} — {MODULES[d.mi]?.name}</div>
                       <div style={{fontSize:10,color:"#222",transform:openDel[i]?"rotate(90deg)":"none",transition:"transform .2s"}}>›</div>
                     </div>
                     {openDel[i]&&<div style={{padding:"10px 14px",background:"#0d0d0d",borderTop:"1px solid #161616",fontSize:11,color:"#888",lineHeight:1.7}} dangerouslySetInnerHTML={{__html:md(d.t)}}/>}
@@ -956,7 +956,7 @@ export default function App() {
       <ProjectsDashboard token={token} user={user} quota={quota}
         onOpenProject={handleOpenProject}
         onNewProject={()=>{}}
-        onUpgrade={()=>setScreen("upgrade")} />
+        onUpgrade={()=>setScreen(quota.packageId > 0 ? "upgrade" : "packages")} />
     </>
   );
 }
