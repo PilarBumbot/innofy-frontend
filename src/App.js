@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 // ============================================================
 // CONFIG
 // ============================================================
-const API = "https://innofy-backend.railway.app"; // ← cambia por tu URL de Railway
+const API = "https://innofy-backend-production.up.railway.app"; // ← cambia por tu URL de Railway
 const WOMPI_REDIRECT = "https://innofy.josepolo.co/pago-exitoso"; // ← cambia por tu dominio
 
 const PACKAGES = [
